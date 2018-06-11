@@ -4,8 +4,8 @@ const bcrypt = require('bcryptjs');
 const UserSchema = new mongoose.Schema({
     username: {type: String, required: true, unique: true},
     password: {type: String, required: true},
-    appointments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Appointments'}],
-    clients: [{type: mongoose.Schema.Types.ObjectId, ref: 'Clients'}],
+    appointments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Appointment'}],
+    clients: [{type: mongoose.Schema.Types.ObjectId, ref: 'Client'}],
     created: {type: Date, default: Date.now()}
 })
 

@@ -1,11 +1,16 @@
 'use strict';
 const nodemailer = require('nodemailer');
+const xoauth2 = require('xoauth2');
 
 let transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'ctrl.alt.elite.acjj@gmail.com',
-    pass: 'partypizza'
+    xoauth2: xoauth2.createXOAuth2Generator({
+        user: 'ctrl.alt.elite.acjj@gmail.com',
+        clientId: '',
+        clientSecret:'',
+        refreshToken: ''
+    })
   }  
 })
 

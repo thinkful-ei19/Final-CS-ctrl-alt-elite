@@ -33,11 +33,11 @@ Endpoints guide:
         requires: id (in params, this is appointment ID)
         { userId } in body
         responds with 204
-        if you need to update the front end state, either take update the state on the front end or do another get request on user.
+        if you need to update the front end state, either update the state on the front end or do another get request on user.
 
     Delete client:
     '.../api/clients/:id'
         requires: id (in params, this is client ID)
         { userId } in body
         responds with 204
-        if you need to update the front end state, either take update the state on the front end or do another get request on user.
+        if you need to update the front end state, either update the state on the front end or do another get request on user.

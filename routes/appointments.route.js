@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 const User = require('../models/user')
 const Appointment = require('../models/appointment')
 const nodemailer = require('nodemailer');
+const moment = require('moment');
 
 //Create a new appointment.
 router.post('/appointments/:id', (req, res, next) => {
@@ -45,11 +46,13 @@ router.post('/appointments/:id', (req, res, next) => {
           }
     })
       
+    const time = moment(newApt.time).format('MMMM Do YYYY, h:mm:ss a')
+
     let mailOptions = {
         from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
         to: `${newApt.client.email}`,  
-        subject: `Your ${newApt.time} Appointment with CTRL ALT ELITE`,
-        html: `<p>Hi ${newApt.client.name}, <br/> Your appointment has been scheduled
+        subject: `Your ${time} Appointment with CTRL ALT ELITE`,
+        html: `<p>Hi ${newApt.client}, <br/> Your appointment has been scheduled
         with CTRL ALT ELITE at ${newApt.time}. <br/>Thank you for scheduling with us.</p>`
     };
 

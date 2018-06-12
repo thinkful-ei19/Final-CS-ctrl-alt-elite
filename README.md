@@ -20,15 +20,13 @@ Endpoints guide:
     '../api/appointments/:id'
         requires: id (in params, this is user ID not appointment ID!)
         { time, client, notes } required in body
-        responds with new appointment created;
-        if you need to update the front end state, either take this response and push it in to the state, or run another get request on the get user endpoint which will respond with updated user info.
+        responds with user with new appointment included;
 
     Create client:
     '../api/clients/:id'
         requires: id (in params, this is user ID not client ID!)
         { email, name, phone } required in body
-        responds with new client created;
-        if you need to update the front end state, either take this response and push it in to the state, or run another get request on the get user endpoint which will respond with updated user info.
+        responds with user with new client included;        
 
     Delete appointment:
     '.../api/appointments/:id'

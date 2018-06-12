@@ -1,10 +1,11 @@
 'use strict';
+
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const morgan = require('morgan');
-const passport = require('passport')
+const passport = require('passport');
 
 const { PORT, CLIENT_ORIGIN } = require('./config');
 const { dbConnect } = require('./db-mongoose');
@@ -17,30 +18,31 @@ const app = express();
 
 const registerRouter = require('./routes/register');
 const authRouter = require('./routes/auth');
-const userRouter = require('./routes/users.route')
+const userRouter = require('./routes/users.route');
 const appointmentsRouter = require('./routes/appointments.route');
 const clientsRouter = require('./routes/clients.route');
 
 app.use(
-    morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
-      skip: (req, res) => process.env.NODE_ENV === 'test'
-    })
+  morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
+    skip: (req, res) => process.env.NODE_ENV === 'test'
+  })
 );
   
 app.use(
-cors({
+  cors({
     origin: CLIENT_ORIGIN
-})
+  })
 );
 
 app.use(express.static('public'));
 
-app.use(express.json())
+app.use(express.json());
 
-//
+// Mount routers
 app.use('/api', registerRouter);
 app.use('/api', authRouter);
 
+// Endpoints below are protected
 passport.use(localStrategy);
 passport.use(jwtStrategy);
 

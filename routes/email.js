@@ -1,18 +1,26 @@
 'use strict';
 const nodemailer = require('nodemailer');
-const xoauth2 = require('xoauth2');
+// const xoauth2 = require('xoauth2');
 
 let transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    xoauth2: xoauth2.createXOAuth2Generator({
+    service: 'gmail',
+    auth: {
         user: 'ctrl.alt.elite.acjj@gmail.com',
-        clientId: '',
-        clientSecret:'',
-        refreshToken: ''
-    })
-  }  
-})
+        pass: 'partypizza'
+      }
+  })
+
+// let transporter = nodemailer.createTransport({
+//   service: 'gmail',
+//   auth: {
+//     xoauth2: xoauth2.createXOAuth2Generator({
+//         user: 'ctrl.alt.elite.acjj@gmail.com',
+//         clientId: '873311789311-pdpjljmhka27tbuems1rbobl27b6ahle.apps.googleusercontent.com',
+//         clientSecret:'pRSZ2Z50Nv1Az2rUMlFnpKIh',
+//         refreshToken: ''
+//     })
+//   }  
+// })
 
 // let transporter = nodemailer.createTransport(transport[smtpConfig, defaults])
 

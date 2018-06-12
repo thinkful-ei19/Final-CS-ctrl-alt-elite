@@ -33,11 +33,11 @@ Endpoints guide:
         requires: id (in params, this is appointment ID)
         { userId } in body
         responds with 204
-        if you need to update the front end state, either take this response and push it in to the state, or run another get request on the get user endpoint which will respond with updated user info.
+        if you need to update the front end state, either take update the state on the front end or do another get request on user.
 
     Delete client:
     '.../api/clients/:id'
         requires: id (in params, this is client ID)
         { userId } in body
         responds with 204
-        if you need to update the front end state, either take this response and push it in to the state, or run another get request on the get user endpoint which will respond with updated user info.
+        if you need to update the front end state, either take update the state on the front end or do another get request on user.

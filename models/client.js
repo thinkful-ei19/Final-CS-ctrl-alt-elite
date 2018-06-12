@@ -3,9 +3,9 @@
 const mongoose = require('mongoose');
 
 const ClientsSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    email: { type: String, required: true },
-    phone: { type: String }
+  name: { type: String, required: true },
+  email: { type: String, required: true },
+  phone: { type: String }
 }); 
 
 ClientsSchema.set('toObject', {

@@ -11,7 +11,7 @@ const client = require('../models/client');
 //Get all information pertaining to one user.
 router.post('/users', (req, res, next) => {
   const { username } = req.body;
-    
+
   let currentUser = "User Not Found";
   User.find()
     .populate('appointments')

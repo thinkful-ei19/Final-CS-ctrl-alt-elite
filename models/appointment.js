@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 
 const AppointmentsSchema = new mongoose.Schema({
   time: {type: Date, required: true}, // tested with this formmat - > 2018-06-11 13:00:00
-  client: {type: mongoose.Schema.Types.ObjectId, ref: 'Client'},    
+  client: {type: Object},    
   notes: {type: String}
 }); 
 

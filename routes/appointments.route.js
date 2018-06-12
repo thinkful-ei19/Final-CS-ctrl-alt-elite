@@ -52,7 +52,7 @@ router.post('/appointments/:id', (req, res, next) => {
         from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
         to: `${newApt.client.email}`,  
         subject: `Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
-        html: `<p>Hi ${newApt.client}, <br/> Your appointment has been scheduled
+        html: `<p>Hi ${newApt.client.name}, <br/> Your appointment has been scheduled
         with CTRL ALT ELITE at ${newApt.time}. <br/>Thank you for scheduling with us.</p>`
     };
 

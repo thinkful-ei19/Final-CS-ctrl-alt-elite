@@ -1,12 +1,13 @@
 'use strict';
+require("dotenv").config();
 const nodemailer = require('nodemailer');
 // const xoauth2 = require('xoauth2');
 
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'ctrl.alt.elite.acjj@gmail.com',
-        pass: 'partypizza'
+        user: process.env.GMAIL_USER,
+        pass: process.env.GMAIL_PASS
       }
   })
 
@@ -22,23 +23,11 @@ let transporter = nodemailer.createTransport({
 //   }  
 // })
 
-// let transporter = nodemailer.createTransport(transport[smtpConfig, defaults])
-
-// let smtpConfig = {
-//     host: 'smtp.example.com',
-//     port: 465, //recommended port for gmail, 587 for SSL
-//     secure: false, // upgrade later with STARTTLS
-//     auth: {
-//         user: 'ctrl.alt.elite.acjj@gmail.com',
-//         pass: 'partypizza'
-//     }
-// };
-
 let mailOptions = {
     from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
     to: 'julieskim160@gmail.com',  
     subject: 'Appointment Verification',
-    text: 'Hello World'
+    text: 'Hello World take2'
 
 };
 

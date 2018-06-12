@@ -23,7 +23,7 @@ router.post('/appointments/:id', (req, res, next) => {
             .then((result) => {
                 let updatedResult = result;
                 updatedResult.appointments = newUserInfo.appointments;
-                res.json(result);
+                res.json(updatedResult);
             })
             .catch(err => next(err))
         })

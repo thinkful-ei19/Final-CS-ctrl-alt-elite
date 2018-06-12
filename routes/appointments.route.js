@@ -1,9 +1,11 @@
+'use strict';
+require("dotenv").config();
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
 const User = require('../models/user')
 const Appointment = require('../models/appointment')
-
+const nodemailer = require('nodemailer');
 
 //Create a new appointment.
 router.post('/appointments/:id', (req, res, next) => {
@@ -30,6 +32,28 @@ router.post('/appointments/:id', (req, res, next) => {
         .catch((err) => next(err))
     })
     .catch((err) => next(err))
+
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_PASS
+          }
+    })
+      
+    let mailOptions = {
+        from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
+        to: 'julieskim160@gmail.com',  
+        subject: `Your ${newApt.time} Appointment with CTRL ALT ELITE`,
+        html: `<p>Hi ${newApt.client}, <br/> Your appointment has been scheduled!</p>`
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message sent', info.messageId);
+    });
 })
 
 router.delete('/appointments/:id', (req, res, next) => {

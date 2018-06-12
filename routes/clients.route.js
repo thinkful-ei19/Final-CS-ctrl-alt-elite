@@ -7,7 +7,7 @@ const User = require('../models/user');
 const Client = require('../models/client');
 
 
-//Create a new appointment.
+//Create a new client.
 router.post('/clients/:id', (req, res, next) => {
   const { id } = req.params;
 

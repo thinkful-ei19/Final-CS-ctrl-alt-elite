@@ -16,12 +16,16 @@ router.post('/clients/:id', (req, res, next) => {
   const newClient = { email, name, phone };
 
   User.findById(id)
+  .populate('appointments')
+  .populate('clients')
     .then((result) => {
       let newUserInfo = result;
       Client.create(newClient)
         .then((result) => {
           newUserInfo.clients.push(result.id);            
           User.findByIdAndUpdate(id, newUserInfo)
+          .populate('appointments')
+          .populate('clients')
             .then((result) => {
               let updatedResult = result;
               updatedResult.clients = newUserInfo.clients;

@@ -16,12 +16,16 @@ router.post('/appointments/:id', (req, res, next) => {
   const newApt = { time, client, notes };
 
   User.findById(id)
+    .populate('appointments')
+    .populate('clients')
     .then((result) => {
       let newUserInfo = result;
       Appointment.create(newApt)
         .then((result) => {
           newUserInfo.appointments.push(result.id);            
           User.findByIdAndUpdate(id, newUserInfo)
+            .populate('appointments')
+            .populate('clients')
             .then((result) => {
               let updatedResult = result;
               updatedResult.appointments = newUserInfo.appointments;

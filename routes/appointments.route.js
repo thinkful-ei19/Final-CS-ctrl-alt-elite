@@ -91,6 +91,8 @@ router.delete('/appointments/:id', (req, res, next) => {
 
 
   User.findById(userId)
+    .populate('appointments')
+    .populate('clients')
     .then((result) => {
       console.log('!!!!', result);
       let appointments = [];

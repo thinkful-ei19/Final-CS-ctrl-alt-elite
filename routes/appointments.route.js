@@ -16,6 +16,8 @@ router.post('/appointments/:id', (req, res, next) => {
 
   const newApt = { time, client, notes };
 
+  console.log(newApt)
+
   User.findById(id)
     .populate('appointments')
     .populate('clients')

@@ -15,6 +15,8 @@ router.post('/clients/:id', (req, res, next) => {
 
   const newClient = { email, name, phone };
 
+  console.log(newClient)
+
   User.findById(id)
   .populate('appointments')
   .populate('clients')

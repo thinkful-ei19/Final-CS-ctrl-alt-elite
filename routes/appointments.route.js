@@ -13,19 +13,20 @@ const agenda = require('agenda');
 
 const agenda = new Agenda ({db: {address:dbConnect}})
 
-let transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS
-      }
-})
-
-const appointmentTime = moment(newApt.time).format('MMMM Do YYYY, h:mm:ss a')
 
 
 agenda.define('send appointment reminder', {priority: 'high'}, function(job, done) {
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_PASS
+          }
+    })
     
+    const appointmentTime = moment(newApt.time).format('MMMM Do YYYY, h:mm:ss a')
+
+
     Appointment.find()
       .then(()=> {
 
@@ -34,7 +35,7 @@ agenda.define('send appointment reminder', {priority: 'high'}, function(job, don
     let mailOptions = {
         from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
         to: `${appt.client.email}`,  
-        subject: `REMINDER: Your ${appt.time} Appointment with CTRL ALT ELITE`,
+        subject: `REMINDER: Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
         html: `<p>Hi ${appt.client.name}, <br/> This is a friendly reminder for your appointment
         with CTRL ALT ELITE is at ${appt.time}. <br/>Looking forward to seeing you soon! <br/><br/>If you need to schedule, please contact us at PHONE NUMBER. </p>`
     };
@@ -82,15 +83,15 @@ router.post('/appointments/:id', (req, res, next) => {
     })
     .catch((err) => next(err))
 
-    // let transporter = nodemailer.createTransport({
-    //     service: 'gmail',
-    //     auth: {
-    //         user: process.env.GMAIL_USER,
-    //         pass: process.env.GMAIL_PASS
-    //       }
-    // })
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_PASS
+          }
+    })
       
-    // const appointmentTime = moment(newApt.time).format('MMMM Do YYYY, h:mm:ss a')
+    const appointmentTime = moment(newApt.time).format('MMMM Do YYYY, h:mm:ss a')
 
     let mailOptions = {
         from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
@@ -140,6 +141,16 @@ router.delete('/appointments/:id', (req, res, next) => {
     Appointment.findById(id)
       .then((result) => {
         deletedApt = result;
+        // console.log(deletedApt);
+        let transporter = nodemailer.createTransport({
+          service: 'gmail',
+          auth: {
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_PASS
+          }
+        });
+      
+        const appointmentTime = moment(deletedApt.time).format('MMMM Do YYYY, h:mm:ss a');
       
         let mailOptions = {
           from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
@@ -167,6 +178,8 @@ router.delete('/appointments/:id', (req, res, next) => {
       })
       .catch(err => next(err));
     
+  
+    
   });
 
-module.exports = router;
+  module.exports = router;

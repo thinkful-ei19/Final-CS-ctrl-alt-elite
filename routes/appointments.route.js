@@ -95,6 +95,31 @@ router.delete('/appointments/:id', (req, res, next) => {
     .catch((err) => {
       next(err);
     });
+
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_PASS
+          }
+    })
+      
+    const appointmentTime = moment(newApt.time).format('MMMM Do YYYY, h:mm:ss a')
+
+    let mailOptions = {
+        from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
+        to: `${newApt.client.email}`,  
+        subject: `CANCELLATION: Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
+        html: `<p>Hello ${newApt.client.name}, <br/> Your appointment has successfully been cancelled. 
+        <br/>Have a great day.</p>`
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message sent', info.messageId);
+    });
 });
 
 module.exports = router;

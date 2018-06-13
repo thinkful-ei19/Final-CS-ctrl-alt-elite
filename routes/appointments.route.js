@@ -1,10 +1,10 @@
 'use strict';
-require("dotenv").config();
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const User = require('../models/user')
-const Appointment = require('../models/appointment')
+const User = require('../models/user');
+const Appointment = require('../models/appointment');
 const nodemailer = require('nodemailer');
 const moment = require('moment');
 
@@ -16,7 +16,7 @@ router.post('/appointments/:id', (req, res, next) => {
 
   const newApt = { time, client, notes };
 
-  console.log(newApt)
+  console.log(newApt);
 
   User.findById(id)
     .populate('appointments')
@@ -38,42 +38,46 @@ router.post('/appointments/:id', (req, res, next) => {
         })
         .catch((err) => next(err));
     })
-    .catch((err) => next(err))
+    .catch((err) => next(err));
 
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: process.env.GMAIL_USER,
-            pass: process.env.GMAIL_PASS
-          }
-    })
+  let transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_PASS
+    }
+  });
       
-    const appointmentTime = moment(newApt.time).format('MMMM Do YYYY, h:mm:ss a')
+  const appointmentTime = moment(newApt.time).format('MMMM Do YYYY, h:mm:ss a');
 
-    let mailOptions = {
-        from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
-        to: `${newApt.client.email}`,  
-        subject: `Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
-        html: `<p>Hi ${newApt.client.name}, <br/> Your appointment has been scheduled
+  let mailOptions = {
+    from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
+    to: `${newApt.client.email}`,  
+    subject: `Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
+    html: `<p>Hi ${newApt.client.name}, <br/> Your appointment has been scheduled
         with CTRL ALT ELITE at ${newApt.time}. <br/>Thank you for scheduling with us.</p>`
-    };
+  };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            return console.log(error);
-        }
-        console.log('Message sent', info.messageId);
-    });
-})
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      return console.log(error);
+    }
+    console.log('Message sent', info.messageId);
+  });
+});
 
 
 router.delete('/appointments/:id', (req, res, next) => {
   const { id } = req.params;
   const { userId } = req.body;
 
+  let deletedApt;
   let updateUser;
+
+
   User.findById(userId)
     .then((result) => {
+      console.log('!!!!', result);
       let appointments = [];
       updateUser = result;
       updateUser.appointments.forEach((aptId) => {
@@ -89,39 +93,48 @@ router.delete('/appointments/:id', (req, res, next) => {
       return;
     })
     .catch(err => next(err));
-
-  Appointment.findByIdAndRemove(id)
+  Appointment.findById(id)
     .then((result) => {
-      res.status(204).end();
-    })
-    .catch((err) => {
-      next(err);
-    });
-
-    let transporter = nodemailer.createTransport({
+      deletedApt = result;
+      // console.log(deletedApt);
+      let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: process.env.GMAIL_USER,
-            pass: process.env.GMAIL_PASS
-          }
-    })
-      
-    const appointmentTime = moment(newApt.time).format('MMMM Do YYYY, h:mm:ss a')
-
-    let mailOptions = {
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_PASS
+        }
+      });
+    
+      const appointmentTime = moment(deletedApt.time).format('MMMM Do YYYY, h:mm:ss a');
+    
+      let mailOptions = {
         from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
-        to: `${newApt.client.email}`,  
+        to: `${deletedApt.client.email}`,  
         subject: `CANCELLATION: Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
-        html: `<p>Hello ${newApt.client.name}, <br/> Your appointment has successfully been cancelled. 
-        <br/>Have a great day.</p>`
-    };
-
-    transporter.sendMail(mailOptions, (error, info) => {
+        html: `<p>Hello ${deletedApt.client.name}, <br/> Your appointment has successfully been cancelled. 
+            <br/>Have a great day.</p>`
+      };
+    
+      transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            return console.log(error);
+          return console.log(error);
         }
         console.log('Message sent', info.messageId);
-    });
+      });
+    })
+    .then(() => {
+      Appointment.findByIdAndRemove(id)
+        .then((result) => {
+          res.status(204).end();
+        })
+        .catch((err) => {
+          next(err);
+        });
+    })
+    .catch(err => next(err));
+  
+
+  
 });
 
 module.exports = router;

@@ -40,6 +40,22 @@ Endpoints guide:
         { email, name, phone } required in body
         responds with user with new client included;        
 
+    Edit appointment:
+    PUT
+    '.../api/appointments/:id'
+        requires: id (in params, this is appointment ID)
+        { time, notes, client } in body
+        responds with new appointment
+        if you need to update the front end state, either update the state on the front end or do another get request on user.
+
+    Edit client:
+    PUT
+    '.../api/clients/:id'
+        requires: id (in params, this is client ID)
+        { name, phone, email } in body
+        responds with new client
+        if you need to update the front end state, either update the state on the front end or do another get request on user.
+
     Delete appointment:
     DELETE
     '.../api/appointments/:id'

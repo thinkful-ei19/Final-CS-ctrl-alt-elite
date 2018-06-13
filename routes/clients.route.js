@@ -38,6 +38,20 @@ router.post('/clients/:id', (req, res, next) => {
     .catch((err) => next(err));
 });
 
+router.put('/clients/:id', (req, res, next) => {
+  const { id } = req.params;
+
+  const { email, name, phone } = req.body;
+
+  const newClient = { email, name, phone };
+  
+  Client.findByIdAndUpdate(id, newClient)
+    .then((result) => {
+      res.json(newClient)
+    })
+    .catch((err) => next(err))
+})
+
 router.delete('/clients/:id', (req, res, next) => {
   const { id } = req.params;
   const { userId } = req.body;

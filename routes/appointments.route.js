@@ -66,6 +66,21 @@ router.post('/appointments/:id', (req, res, next) => {
   });
 });
 
+router.put('/appointments/:id', (req, res, next) => {
+  const { id } = req.params;
+
+  const { time, client, notes } = req.body;
+
+  const newApt = { time, client, notes }
+
+  console.log(newApt)
+
+  Appointment.findByIdAndUpdate(id, newApt)
+    .then((result) => {
+      res.json(newApt)
+    })
+    .catch((err) => next(err))
+})
 
 router.delete('/appointments/:id', (req, res, next) => {
   const { id } = req.params;

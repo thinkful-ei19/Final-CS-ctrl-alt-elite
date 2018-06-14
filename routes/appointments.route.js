@@ -8,12 +8,9 @@ const Appointment = require('../models/appointment');
 const nodemailer = require('nodemailer');
 const moment = require('moment');
 
-//Create a new appointment.
 router.post('/appointments/:id', (req, res, next) => {
   const { id } = req.params;
-
   const { time, client, notes } = req.body;
-
   const newApt = { time, client, notes };
 
   User.findById(id)
@@ -66,16 +63,36 @@ router.post('/appointments/:id', (req, res, next) => {
 
 router.put('/appointments/:id', (req, res, next) => {
   const { id } = req.params;
-
   const { time, client, notes } = req.body;
-
   const newApt = { time, client, notes }
-
-  console.log(newApt)
 
   Appointment.findByIdAndUpdate(id, newApt)
     .then((result) => {
       res.json(newApt)
+      let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_PASS
+        }
+      });
+    
+      const appointmentTime = moment(newApt.time).format('MMMM Do YYYY, h:mm:ss a');
+    
+      let mailOptions = {
+        from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
+        to: `${newApt.client.email}`,  
+        subject: `RESCHEDULE: Your new Appointment time is ${appointmentTime} with CTRL ALT ELITE`,
+        html: `<p>Hi ${newApt.client.name}, <br/> Your appointment has successfully been rescheduled for ${appointmentTime}. 
+            <br/>We look forward to seeing you.</p>`
+      };
+    
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          return console.log(error);
+        }
+        console.log('Message sent', info.messageId);
+      });
     })
     .catch((err) => next(err))
 })
@@ -111,7 +128,6 @@ router.delete('/appointments/:id', (req, res, next) => {
   Appointment.findById(id)
     .then((result) => {
       deletedApt = result;
-      // console.log(deletedApt);
       let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
@@ -147,7 +163,6 @@ router.delete('/appointments/:id', (req, res, next) => {
         });
     })
     .catch(err => next(err));
-  
 
   
 });

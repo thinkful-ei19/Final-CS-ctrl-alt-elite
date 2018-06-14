@@ -189,6 +189,30 @@ router.put('/appointments/:id', (req, res, next) => {
   Appointment.findByIdAndUpdate(id, newApt)
     .then((result) => {
       res.json(newApt)
+      let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_PASS
+        }
+      });
+    
+      const appointmentTime = moment(newApt.time).format('MMMM Do YYYY, h:mm:ss a');
+    
+      let mailOptions = {
+        from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
+        to: `${newApt.client.email}`,  
+        subject: `RESCHEDULE: Your new Appointment time is ${appointmentTime} with CTRL ALT ELITE`,
+        html: `<p>Hi ${newApt.client.name}, <br/> Your appointment has successfully been rescheduled for ${appointmentTime}. 
+            <br/>We look forward to seeing you.</p>`
+      };
+    
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          return console.log(error);
+        }
+        console.log('Message sent', info.messageId);
+      });
     })
     .catch((err) => next(err))
 })

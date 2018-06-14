@@ -4,7 +4,7 @@ const moment = require('moment');
 const nodemailer = require('nodemailer');
 
 function notify() {
-    cron.schedule('* * 9 * * *', function(){
+    cron.schedule('*/10 * * * * *', function(){
     console.log('running a task at 9:00 AM every day');
     
     let needsNotification = [];
@@ -13,7 +13,7 @@ function notify() {
         .then((result) => {
             result.forEach((apt) => {         
                 // 'in a day' for day before
-                if (moment(apt.time).fromNow() === 'in 2 days') {
+                if (moment(apt.time).fromNow() === 'in 2 days' ) {
                     needsNotification.push(apt);
                 }
             })
@@ -35,8 +35,7 @@ function notify() {
                 from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
                 to: `${apt.client.email}`,  
                 subject: `Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
-                html: `<p>Hi ${apt.client.name}, <br/> Your appointment has been scheduled
-                    with CTRL ALT ELITE at ${apt.time}. <br/>Thank you for scheduling with us.</p>`
+                html: `<p>Hi ${apt.client.name}, <br/> This is a friendly reminder that you have an appointment at ${apt.time}. <br/>Thank you for scheduling with us.</p>`
               };
             
               transporter.sendMail(mailOptions, (error, info) => {

@@ -3,57 +3,57 @@ require("dotenv").config();
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const User = require('../models/user')
-const Appointment = require('../models/appointment')
+const User = require('../models/user');
+const Appointment = require('../models/appointment');
 const nodemailer = require('nodemailer');
 const moment = require('moment');
 // const { dbConnect } = require('./db-mongoose');
-const agenda = require('agenda');
+// const agenda = require('agenda');
 
-const mongoConnection = 'mongodb://user:password123@ds255930.mlab.com:55930/final-capstone'
-const agenda = new Agenda ({db: {address:mongoConnection}})
+// const mongoConnection = 'mongodb://user:password123@ds255930.mlab.com:55930/final-capstone'
+// const agenda = new Agenda ({db: {address:mongoConnection}})
 
 
-agenda.define('send appointment reminder', {priority: 'high'}, function(job, done) {
-    let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: process.env.GMAIL_USER,
-            pass: process.env.GMAIL_PASS
-          }
-    })
+// agenda.define('send appointment reminder', {priority: 'high'}, function(job, done) {
+//     let transporter = nodemailer.createTransport({
+//         service: 'gmail',
+//         auth: {
+//             user: process.env.GMAIL_USER,
+//             pass: process.env.GMAIL_PASS
+//           }
+//     })
     
-    const appointmentTime = moment(appt.time).format('MMMM Do YYYY, h:mm:ss a')
-    const appt = {client, time}
+//     const appointmentTime = moment(appt.time).format('MMMM Do YYYY, h:mm:ss a')
+//     const appt = {client, time}
 
-    //maybe add a creatorID
+//     //maybe add a creatorID
     
-    Appointment.find({time:{$lt:date.parse(Date.now())+date.parse(Date.now()+(2*24*60*60*1000))}})
-      .then((results)=> {
-        results.forEach()
-        let mailOptions = {
-            from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
-            to: `${appt.client.email}`,  
-            subject: `REMINDER: Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
-            html: `<p>Hi ${appt.client.name}, <br/> This is a friendly reminder for your appointment
-            with CTRL ALT ELITE is at ${appt.time}. <br/>Looking forward to seeing you soon! <br/><br/>If you need to schedule, please contact us at PHONE NUMBER. </p>`
-        };
-        transporter.sendMail(mailOptions, function (error, response) {
-            console.log('Message sent: ' + response.message);
-            transporter.close();
-            done();
-        });
-      })
+//     Appointment.find({time:{$lt:date.parse(Date.now())+date.parse(Date.now()+(2*24*60*60*1000))}})
+//       .then((results)=> {
+//         results.forEach()
+//         let mailOptions = {
+//             from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
+//             to: `${appt.client.email}`,  
+//             subject: `REMINDER: Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
+//             html: `<p>Hi ${appt.client.name}, <br/> This is a friendly reminder for your appointment
+//             with CTRL ALT ELITE is at ${appt.time}. <br/>Looking forward to seeing you soon! <br/><br/>If you need to schedule, please contact us at PHONE NUMBER. </p>`
+//         };
+//         transporter.sendMail(mailOptions, function (error, response) {
+//             console.log('Message sent: ' + response.message);
+//             transporter.close();
+//             done();
+//         });
+//       })
 
 
 
 
-})
+// })
 
-agenda.on('24 hours before', function() {
-    agenda.schedule('24 hours before', )
-    agenda.start();
-})
+// agenda.on('24 hours before', function() {
+//     agenda.schedule('24 hours before', )
+//     agenda.start();
+// })
 
 
 //router.post() 

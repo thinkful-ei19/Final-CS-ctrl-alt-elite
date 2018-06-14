@@ -7,40 +7,62 @@ const User = require('../models/user');
 const Appointment = require('../models/appointment');
 const nodemailer = require('nodemailer');
 const moment = require('moment');
-const {CronJob} = require('cron');
+// const {CronJob} = require('cron');
 
-const job = new CronJob({
+// const job = new CronJob({
   
-  cronTime: '00 30 11 * * 1-5',
-  onTick: function() {
-    let transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_PASS
-      }
-    });
-    const appointmentTime = moment(appointmentTime).format('MMMM Do YYYY, h:mm:ss a');
-    Appointment.find({time:{$lt:date.parse(Date.now())+date.parse(Date.now()+(2*24*60*60*1000))}})
-      .then((results)=> {
-        results.forEach();
-        let mailOptions = {
-          from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
-          to: `${appt.client.email}`,  
-          subject: `REMINDER: Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
-          html: `<p>Hi ${appt.client.name}, <br/> This is a friendly reminder for your appointment
-            with CTRL ALT ELITE is at ${appt.time}. <br/>Looking forward to seeing you soon! <br/><br/>If you need to schedule, please contact us at PHONE NUMBER. </p>`
-        };
-        transporter.sendMail(mailOptions, function (error, response) {
-          console.log('Message sent: ' + response.message);
-          transporter.close();
-        });
-      });
-  },
-  start: false,
-  timeZone: 'America/Los_Angeles'
-});
-job.start();
+//   // cronTime: '*/1 * * * *',
+//   onTick: function() {
+//     let transporter = nodemailer.createTransport({
+//       service: 'gmail',
+//       auth: {
+//         user: process.env.GMAIL_USER,
+//         pass: process.env.GMAIL_PASS
+//       }
+//     });
+
+//     // const appointmentTime = moment(appointmentTime).format('MMMM Do YYYY, h:mm:ss a');
+//     const 
+//     Appointment.find()
+//       .then((results)=> {
+//         const now = (Number(moment().format().from(appt.time)))
+
+//         console.log('hshshshshshhshhshshs');
+
+//         let mailOptions = {
+//           from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
+//           to: 'cjszk@hotmail.com',  
+//           subject: `REMINDER: Your 2:00 Appointment with CTRL ALT ELITE`,
+//           html: `<p>Hi Chris, <br/> This is a friendly reminder for your appointment
+//             with CTRL ALT ELITE is at 2:00. <br/>Looking forward to seeing you soon! <br/><br/>If you need to schedule, please contact us at PHONE NUMBER. </p>`
+//         };
+//         transporter.sendMail(mailOptions, function (error, response) {
+//           console.log('Message sent: ' + response.message);
+//           transporter.close();
+//         });
+//       });
+    // Appointment.find({time:{$lt:date.parse(Date.now())+date.parse(Date.now()+(2*24*60*60*1000))}})
+    // Appointment.find()
+    //   .then((results)=> {
+    //     console.log(Number(moment().hours()))
+    //     console.log('hshshshshshhshhshshs');
+    //     let mailOptions = {
+    //       from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
+    //       to: `${appt.client.email}`,  
+    //       subject: `REMINDER: Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
+    //       html: `<p>Hi ${appt.client.name}, <br/> This is a friendly reminder for your appointment
+    //         with CTRL ALT ELITE is at ${appt.time}. <br/>Looking forward to seeing you soon! <br/><br/>If you need to schedule, please contact us at PHONE NUMBER. </p>`
+    //     };
+    //     transporter.sendMail(mailOptions, function (error, response) {
+    //       console.log('Message sent: ' + response.message);
+    //       transporter.close();
+    //     });
+    //   });
+//   },
+//   start: false,
+//   timeZone: 'America/Los_Angeles'
+// });
+// job.start();
 
 
 // const { dbConnect } = require('./db-mongoose');
@@ -105,6 +127,8 @@ router.post('/appointments/:id', (req, res, next) => {
 
   const newApt = { time, client, notes };
 
+  console.log(newApt);
+
   User.findById(id)
     .populate('appointments')
     .populate('clients')
@@ -153,15 +177,30 @@ router.post('/appointments/:id', (req, res, next) => {
   });
 });
 
+router.put('/appointments/:id', (req, res, next) => {
+  const { id } = req.params;
+
+  const { time, client, notes } = req.body;
+
+  const newApt = { time, client, notes }
+
+  console.log(newApt)
+
+  Appointment.findByIdAndUpdate(id, newApt)
+    .then((result) => {
+      res.json(newApt)
+    })
+    .catch((err) => next(err))
+})
 
 router.delete('/appointments/:id', (req, res, next) => {
   const { id } = req.params;
   const { userId } = req.body;
-  
+
   let deletedApt;
   let updateUser;
-  
-  
+
+
   User.findById(userId)
     .populate('appointments')
     .populate('clients')
@@ -193,17 +232,17 @@ router.delete('/appointments/:id', (req, res, next) => {
           pass: process.env.GMAIL_PASS
         }
       });
-      
+    
       const appointmentTime = moment(deletedApt.time).format('MMMM Do YYYY, h:mm:ss a');
-      
+    
       let mailOptions = {
         from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
         to: `${deletedApt.client.email}`,  
         subject: `CANCELLATION: Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
         html: `<p>Hello ${deletedApt.client.name}, <br/> Your appointment has successfully been cancelled. 
-              <br/>Have a great day.</p>`
+            <br/>Have a great day.</p>`
       };
-      
+    
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
           return console.log(error);
@@ -221,9 +260,9 @@ router.delete('/appointments/:id', (req, res, next) => {
         });
     })
     .catch(err => next(err));
-    
   
-    
+
+  
 });
 
 module.exports = router;

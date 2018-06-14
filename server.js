@@ -15,6 +15,7 @@ const jwtStrategy = require('./passport/jwt');
 const jwt = require('jsonwebtoken');
 
 const app = express();
+app.use(bodyParser.json());
 
 const registerRouter = require('./routes/register');
 const authRouter = require('./routes/auth');

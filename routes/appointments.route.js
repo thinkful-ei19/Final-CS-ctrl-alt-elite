@@ -10,48 +10,56 @@ const moment = require('moment');
 // const { dbConnect } = require('./db-mongoose');
 const agenda = require('agenda');
 
+const mongoConnection = 'mongodb://user:password123@ds255930.mlab.com:55930/final-capstone'
+const agenda = new Agenda ({db: {address:mongoConnection}})
 
-// const agenda = new Agenda ({db: {address:dbConnect, connection: 'User'}})
 
-
-
-// agenda.define('send appointment reminder', {priority: 'high'}, function(job, done) {
-//     let transporter = nodemailer.createTransport({
-//         service: 'gmail',
-//         auth: {
-//             user: process.env.GMAIL_USER,
-//             pass: process.env.GMAIL_PASS
-//           }
-//     })
+agenda.define('send appointment reminder', {priority: 'high'}, function(job, done) {
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_PASS
+          }
+    })
     
-//     const appointmentTime = moment(newApt.time).format('MMMM Do YYYY, h:mm:ss a')
+    const appointmentTime = moment(appt.time).format('MMMM Do YYYY, h:mm:ss a')
+    const appt = {client, time}
+
+    //maybe add a creatorID
+    
+    Appointment.find({time:{$lt:date.parse(Date.now())+date.parse(Date.now()+(2*24*60*60*1000))}})
+      .then((results)=> {
+        results.forEach()
+        let mailOptions = {
+            from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
+            to: `${appt.client.email}`,  
+            subject: `REMINDER: Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
+            html: `<p>Hi ${appt.client.name}, <br/> This is a friendly reminder for your appointment
+            with CTRL ALT ELITE is at ${appt.time}. <br/>Looking forward to seeing you soon! <br/><br/>If you need to schedule, please contact us at PHONE NUMBER. </p>`
+        };
+        transporter.sendMail(mailOptions, function (error, response) {
+            console.log('Message sent: ' + response.message);
+            transporter.close();
+            done();
+        });
+      })
 
 
-//     Appointment.find()
-//       .then(()=> {
 
-//       })
 
-//     let mailOptions = {
-//         from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
-//         to: `${appt.client.email}`,  
-//         subject: `REMINDER: Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
-//         html: `<p>Hi ${appt.client.name}, <br/> This is a friendly reminder for your appointment
-//         with CTRL ALT ELITE is at ${appt.time}. <br/>Looking forward to seeing you soon! <br/><br/>If you need to schedule, please contact us at PHONE NUMBER. </p>`
-//     };
-//     transporter.sendMail(mailOptions, function (error, response) {
-//         console.log('Message sent: ' + response.message);
-//         transporter.close();
-//         done();
-//     });
+})
 
-// })
+agenda.on('24 hours before', function() {
+    agenda.schedule('24 hours before', )
+    agenda.start();
+})
 
-// agenda.on('24 hours before', function() {
-//     agenda.schedule('24 hours before', )
-//     agenda.start();
-// })
 
+//router.post() 
+//make endpoint for cron job, then query mongo, if <24 hr, 
+//send out email
+//node-cron stores it elsewhere 
 
 //Create a new appointment.
 router.post('/appointments/:id', (req, res, next) => {

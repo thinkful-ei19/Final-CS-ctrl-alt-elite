@@ -23,6 +23,8 @@ const userRouter = require('./routes/users.route');
 const appointmentsRouter = require('./routes/appointments.route');
 const clientsRouter = require('./routes/clients.route');
 
+const notify = require('./cron/notifications');
+
 app.use(
   morgan(process.env.NODE_ENV === 'production' ? 'common' : 'dev', {
     skip: (req, res) => process.env.NODE_ENV === 'test'
@@ -52,6 +54,8 @@ app.use('/api', appointmentsRouter);
 app.use('/api', clientsRouter);
 
 app.use(passport.authenticate('jwt', {session: false, failWithError: true}));
+
+notify();
 
 function runServer(port = PORT) {
   const server = app

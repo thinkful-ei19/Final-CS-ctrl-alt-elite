@@ -4,7 +4,7 @@ const moment = require('moment');
 const nodemailer = require('nodemailer');
 
 function notify() {
-    cron.schedule('* * 9 * * *', function(){
+    cron.schedule('0 9 * * *', function(){
     console.log('running a task at 9:00 AM every day');
     
     let needsNotification = [];

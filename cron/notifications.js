@@ -29,7 +29,7 @@ function notify() {
                 }
               });
 
-            const appointmentTime = moment(apt.time).format('MMMM Do YYYY, h:mm:ss a');
+            const appointmentTime = moment(apt.time).format('MMMM Do YYYY, h:mm a');
 
               let mailOptions = {
                 from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',

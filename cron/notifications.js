@@ -35,7 +35,7 @@ function notify() {
                 from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
                 to: `${apt.client.email}`,  
                 subject: `REMINDER: Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
-                html: `<p>Hi ${apt.client.name}, <br/> This is a friendly reminder that your upcoming appointment is at ${apt.time}. <br/>Thank you for scheduling with us.</p>`
+                html: `<p>Hi ${apt.client.name}, <br/> <br/> This is a friendly reminder that your upcoming appointment is at ${apt.time}. <br/>Thank you for scheduling with us.</p>`
               };
             
               transporter.sendMail(mailOptions, (error, info) => {

@@ -43,14 +43,15 @@ router.post('/appointments/:id', (req, res, next) => {
     }
   });
       
-  const appointmentTime = moment(newApt.time).format('MMMM Do YYYY, h:mm:ss a');
+  const appointmentTime = moment(newApt.time).format('MMMM Do YYYY, h:mm a');
+  const appointmentDay = moment(newApt.time).format('dddd');
 
   let mailOptions = {
     from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
     to: `${newApt.client.email}`,  
     subject: `Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
-    html: `<p>Hi ${newApt.client.name}, <br/> Your appointment has been scheduled
-        with CTRL ALT ELITE at ${newApt.time}. <br/>Thank you for scheduling with us.</p>`
+    html: `<p>Hi ${newApt.client.name}, <br/> <br/> Your appointment has been scheduled
+        with CTRL ALT ELITE on ${appointmentDay} at ${appointmentTime}. <br/><br/>Thank you for scheduling with us.</p>`
   };
 
   transporter.sendMail(mailOptions, (error, info) => {
@@ -77,14 +78,14 @@ router.put('/appointments/:id', (req, res, next) => {
         }
       });
     
-      const appointmentTime = moment(newApt.time).format('MMMM Do YYYY, h:mm:ss a');
+      const appointmentTime = moment(newApt.time).format('MMMM Do YYYY, h:mm a');
     
       let mailOptions = {
         from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
         to: `${newApt.client.email}`,  
         subject: `RESCHEDULE: Your new Appointment time is ${appointmentTime} with CTRL ALT ELITE`,
-        html: `<p>Hi ${newApt.client.name}, <br/> Your appointment has successfully been rescheduled for ${appointmentTime}. 
-            <br/>We look forward to seeing you.</p>`
+        html: `<p>Hi ${newApt.client.name}, <br/> <br/> Your appointment has successfully been rescheduled for ${appointmentTime}. 
+            <br/> <br/>We look forward to seeing you.</p>`
       };
     
       transporter.sendMail(mailOptions, (error, info) => {
@@ -136,14 +137,14 @@ router.delete('/appointments/:id', (req, res, next) => {
         }
       });
     
-      const appointmentTime = moment(deletedApt.time).format('MMMM Do YYYY, h:mm:ss a');
+      const appointmentTime = moment(deletedApt.time).format('MMMM Do YYYY, h:mm a');
     
       let mailOptions = {
         from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
         to: `${deletedApt.client.email}`,  
         subject: `CANCELLATION: Your ${appointmentTime} Appointment with CTRL ALT ELITE`,
-        html: `<p>Hello ${deletedApt.client.name}, <br/> Your appointment has successfully been cancelled. 
-            <br/>Have a great day.</p>`
+        html: `<p>Hello ${deletedApt.client.name}, <br/><br/> Your appointment has successfully been cancelled. 
+            <br/><br/>Have a great day.</p>`
       };
     
       transporter.sendMail(mailOptions, (error, info) => {

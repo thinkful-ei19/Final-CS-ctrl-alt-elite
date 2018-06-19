@@ -35,7 +35,7 @@ function thanks() {
                 from: 'CTRL ALT ELITE <ctrl.alt.elite.acjj@gmail.com>',
                 to: `${apt.client.email}`,  
                 subject: `Thank You!`,
-                html: `<p>Hi there, ${apt.client.name}, <br/>We just wanted to say thanks for using our services! </p>`
+                html: `<p>Hi there, ${apt.client.name}, <br/><br/>We just wanted to say thanks for using our services! </p>`
               };
             
               transporter.sendMail(mailOptions, (error, info) => {

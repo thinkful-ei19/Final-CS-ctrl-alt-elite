@@ -5,15 +5,17 @@ const nodemailer = require('nodemailer');
 
 function thanks() {
     cron.schedule('0 9 * * *', function(){
-    console.log('running a task at 9:00 AM every day');
+    console.log('running');
     
     let needsNotification = [];
 
-    Appointment.find()
+    Appointment.find({time:{$lt: new Date()}})
         .then((result) => {
             result.forEach((apt) => {         
-                // day after
-                if (moment(apt.time).subtract(2, 'days').calendary()) {
+                // 1 day after
+                console.log(apt);
+                const dayAgo = moment().subtract(1, 'd')
+                if (moment(apt.time).fromNow() >= dayAgo.fromNow()) {
                     needsNotification.push(apt);
                 }
             })

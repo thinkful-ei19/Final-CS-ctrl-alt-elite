@@ -13,8 +13,8 @@ function thanks() {
         .then((result) => {
             result.forEach((apt) => {         
                 // 1 day after
-                console.log(apt);
-                const dayAgo = moment().subtract(1, 'd')
+                // console.log(apt);
+                const dayAgo = moment().subtract(2, 'd')
                 if (moment(apt.time).fromNow() >= dayAgo.fromNow()) {
                     needsNotification.push(apt);
                 }

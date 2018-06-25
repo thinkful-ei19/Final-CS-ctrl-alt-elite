@@ -9,14 +9,17 @@ function thanks() {
     
     let needsNotification = [];
 
-    Appointment.find({time:{$lt: new Date()}})
+    Appointment.find() //only find appointments thanked:false
         .then((result) => {
             result.forEach((apt) => {         
                 // 1 day after
                 // console.log(apt);
-                const dayAgo = moment().subtract(2, 'd')
-                if (moment(apt.time).fromNow() >= dayAgo.fromNow()) {
-                    needsNotification.push(apt);
+                const dayAgo = moment().subtract(1, 'd')
+                // if (moment(apt.time).fromNow() >= dayAgo.fromNow()) {
+                //     needsNotification.push(apt);
+                // }
+                if(moment() >= moment(apt.time)) {
+                  needsNotification.push(apt);
                 }
             })
         })

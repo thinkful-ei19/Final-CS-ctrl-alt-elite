@@ -47,7 +47,8 @@ router.get('/users/:id', (req, res, next) => {
 
 })
 
-router.put('/users/:id', (req, res, next) => {
+//Change password
+router.put('/change-password/:id', (req, res, next) => {
   const { id } = req.params;
 
   const { password } = req.body;
@@ -75,6 +76,35 @@ router.put('/users/:id', (req, res, next) => {
     .catch(err => next(err))
 })
 
+//Change Theme
+router.put('/change-theme/:id', (req, res, next) => {
+  const { id } = req.params;
+
+  const { theme } = req.body;
+  
+  let hashedPassword;
+
+  console.log(theme)
+
+  let newUserInfo;
+  User.findById(id)
+    .then((result) => {
+      newUserInfo = result;
+      if (!newUserInfo.options) {
+        newUserInfo.options = {}
+      }
+      newUserInfo.options.theme = theme;
+      return newUserInfo;
+    })
+    .then(() => {
+      User.findByIdAndUpdate(id, newUserInfo)
+      .then((result) => {
+        res.json(newUserInfo);
+      })
+      .catch(err => next(err))
+    })
+    .catch(err => next(err))
+})
 
 
 module.exports = router;

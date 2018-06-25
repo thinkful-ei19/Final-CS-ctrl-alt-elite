@@ -5,7 +5,10 @@ const mongoose = require('mongoose');
 const AppointmentsSchema = new mongoose.Schema({
   time: {type: Date, required: true}, // tested with this formmat - > 2018-06-11 13:00:00
   client: {type: Object},    
-  notes: {type: String}
+  notes: {type: String},
+  thanked: {type: Boolean, default: false}
+  //check for if they were thanked
+  //once sent out, mark as true;
 }); 
 
 AppointmentsSchema.set('toObject', {

@@ -8,7 +8,8 @@ const UserSchema = new mongoose.Schema({
   password: {type: String, required: true},
   appointments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Appointment'}],
   clients: [{type: mongoose.Schema.Types.ObjectId, ref: 'Client'}],
-  created: {type: Date, default: Date.now()}
+  created: {type: Date, default: Date.now()},
+  options: {type: Object}
 });
 
 UserSchema.set('toObject', {

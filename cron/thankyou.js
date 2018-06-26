@@ -5,24 +5,31 @@ const nodemailer = require('nodemailer');
 
 function thanks() {
     cron.schedule('0 9 * * *', function(){
-    console.log('running');
     
     let needsNotification = [];
 
-    Appointment.find() //only find appointments thanked:false
+    Appointment.find({thanked:false}) 
         .then((result) => {
             result.forEach((apt) => {         
-                // 1 day after
                 // console.log(apt);
-                const dayAgo = moment().subtract(1, 'd')
+                const dayAgo = moment().to(apt.time)
                 // if (moment(apt.time).fromNow() >= dayAgo.fromNow()) {
                 //     needsNotification.push(apt);
                 // }
-                if(moment() >= moment(apt.time)) {
+                if(dayAgo === "a day ago") {
                   needsNotification.push(apt);
+                  Appointment.findByIdAndUpdate(apt.id,{ 
+                    $set: {thanked: true}
+                  },{new:true})
+                  .then(apt=> console.log(apt))
                 }
+
             })
-        })
+              
+                
+            })
+
+      
         .then(() => {
             console.log(needsNotification)
             needsNotification.forEach((apt) => {

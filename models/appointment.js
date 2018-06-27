@@ -7,8 +7,6 @@ const AppointmentsSchema = new mongoose.Schema({
   client: {type: Object},    
   notes: {type: String},
   thanked: {type: Boolean, default: false}
-  //check for if they were thanked
-  //once sent out, mark as true;
 }); 
 
 AppointmentsSchema.set('toObject', {

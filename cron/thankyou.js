@@ -11,11 +11,7 @@ function thanks() {
     Appointment.find({thanked:false}) 
         .then((result) => {
             result.forEach((apt) => {         
-                // console.log(apt);
                 const dayAgo = moment().to(apt.time)
-                // if (moment(apt.time).fromNow() >= dayAgo.fromNow()) {
-                //     needsNotification.push(apt);
-                // }
                 if(dayAgo === "a day ago") {
                   needsNotification.push(apt);
                   Appointment.findByIdAndUpdate(apt.id,{ 
@@ -23,13 +19,8 @@ function thanks() {
                   },{new:true})
                   .then(apt=> console.log(apt))
                 }
-
-            })
-              
-                
-            })
-
-      
+            })      
+        })
         .then(() => {
             console.log(needsNotification)
             needsNotification.forEach((apt) => {

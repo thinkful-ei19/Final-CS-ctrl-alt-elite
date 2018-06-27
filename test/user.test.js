@@ -6,3 +6,9 @@ const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 
+const User = require('../models/user');
+
+const expect = chai.expect;
+
+chai.use(chaiHttp);
+

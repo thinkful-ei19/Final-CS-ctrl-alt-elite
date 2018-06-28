@@ -42,7 +42,7 @@ router.post('/appointments/:id', (req, res, next) => {
       pass: process.env.GMAIL_PASS
     }
   });
-      
+  
   const appointmentTime = moment(newApt.time).format('MMMM Do YYYY, h:mm a');
   const appointmentDay = moment(newApt.time).format('dddd');
 

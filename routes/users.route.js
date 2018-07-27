@@ -75,6 +75,28 @@ router.put('/users/:id', (req, res, next) => {
     .catch(err => next(err))
 })
 
+router.put('/change-theme/:id', (req, res, next) => {
+    const { id } = req.params;
+    const { theme } = req.body;
+
+    let response;
+    User.findById(id)
+      .then((result) => {
+        let user = result;
+        user.options = { theme };
+        return user;
+      })
+      .then((result) => {
+        response = result;        
+        User.findByIdAndUpdate(id, result)
+          .then((result) => {
+            res.json(response);
+          })
+          .catch(err => next(err))
+      })
+      .catch(err => next(err))
+})
+
 
 
 module.exports = router;

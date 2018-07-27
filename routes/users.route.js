@@ -76,35 +76,28 @@ router.put('/change-password/:id', (req, res, next) => {
     .catch(err => next(err))
 })
 
-//Change Theme
 router.put('/change-theme/:id', (req, res, next) => {
-  const { id } = req.params;
+    const { id } = req.params;
+    const { theme } = req.body;
 
-  const { theme } = req.body;
-  
-  let hashedPassword;
-
-  console.log(theme)
-
-  let newUserInfo;
-  User.findById(id)
-    .then((result) => {
-      newUserInfo = result;
-      if (!newUserInfo.options) {
-        newUserInfo.options = {}
-      }
-      newUserInfo.options.theme = theme;
-      return newUserInfo;
-    })
-    .then(() => {
-      User.findByIdAndUpdate(id, newUserInfo)
+    let response;
+    User.findById(id)
       .then((result) => {
-        res.json(newUserInfo);
+        let user = result;
+        user.options = { theme };
+        return user;
+      })
+      .then((result) => {
+        response = result;        
+        User.findByIdAndUpdate(id, result)
+          .then((result) => {
+            res.json(response);
+          })
+          .catch(err => next(err))
       })
       .catch(err => next(err))
-    })
-    .catch(err => next(err))
 })
+
 
 
 module.exports = router;

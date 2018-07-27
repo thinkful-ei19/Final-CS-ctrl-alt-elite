@@ -3,7 +3,7 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
-// const cors = require('cors');
+const cors = require('cors');
 const morgan = require('morgan');
 const passport = require('passport');
 
@@ -32,11 +32,11 @@ app.use(
   })
 );
   
-// app.use(
-//   cors({
-//     origin: CLIENT_ORIGIN
-//   })
-// );
+app.use(
+  cors({
+    origin: CLIENT_ORIGIN
+  })
+);
 
 app.get('/api', (req, res, next) => {
   res.json('Heroku Server Started')

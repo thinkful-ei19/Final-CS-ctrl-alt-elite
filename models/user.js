@@ -9,11 +9,7 @@ const UserSchema = new mongoose.Schema({
   appointments: [{type: mongoose.Schema.Types.ObjectId, ref: 'Appointment'}],
   clients: [{type: mongoose.Schema.Types.ObjectId, ref: 'Client'}],
   created: {type: Date, default: Date.now()},
-<<<<<<< HEAD
-  options: {type: Object, default: {theme: 'light'}}
-=======
   options: {type: Object, default: {theme:'light'}}
->>>>>>> b1615e7e9f8b4f46519c4a7ca0ac8ad7d7869466
 });
 
 UserSchema.set('toObject', {
